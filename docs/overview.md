@@ -10,6 +10,12 @@ pip install ai-cli
 
 ## Commands
 
+### Config
+
+Set up the initial configuration.
+
+**Syntax:** `ai config`
+
 ### Prompt
 
 Manage prompt files used with AI services.

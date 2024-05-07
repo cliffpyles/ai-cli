@@ -3,9 +3,7 @@
 import click
 import json
 import os
-import sys
-
-from commands.commands import create_prompt, list_prompts, remove_prompt, send_message
+from commands.commands import create_prompt, list_prompts, remove_prompt, send_message, setup_config
 
 # Function to load settings
 def load_settings():
@@ -26,6 +24,10 @@ settings = load_settings()
 def cli():
     """This CLI tool facilitates interaction with AI services from the command line."""
     pass
+
+@cli.command('config', help='Set up the initial configuration.')
+def config():
+    setup_config()
 
 @cli.group(help='Manage prompt files used with AI services.')
 def prompt():
