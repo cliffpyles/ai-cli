@@ -2,13 +2,19 @@
 
 This CLI tool facilitates interaction with AI services, providing a streamlined way to manage prompts and send queries directly from the command line. It's designed for developers, data scientists, and AI enthusiasts looking to leverage AI models without the need for a GUI.
 
+## Installation
+To install the CLI tool, run the following command:
+```
+pip install ai-cli
+```
+
 ## Commands
 
 ### Prompt
 
 Manage prompt files used with AI services.
 
-**Syntax:** `ai prompt <subcommand> [--options] [...arguments]`
+**Syntax:** `ai prompt <subcommand> [...arguments]`
 
 #### Subcommands
 
@@ -16,12 +22,17 @@ Manage prompt files used with AI services.
 
 Create a prompt file.
 
-**Syntax:** `ai prompt create [--options] <promptName>`
+**Syntax:** `ai prompt create <promptName> [--options]`
 
 **Examples:**
 ```
 ai prompt create "new_prompt_name"
+ai prompt create "new_prompt_name" --content "Describe the current trends in AI."
 ```
+
+###### Options
+
+- **--content, -c <promptContent>**: Specifies the text content of the new prompt.
 
 ##### List
 
@@ -31,15 +42,15 @@ List all existing prompts.
 
 ##### Remove
 
-Remove a specified prompt file.
+Remove a prompt file.
 
-**Syntax:** `ai prompt remove [--options] <promptName>`
+**Syntax:** `ai prompt remove <promptName> [--options]`
 
 ##### Send
 
 Send a message or a prompt to an AI service.
 
-**Syntax:** `ai send [--options] <messageOrPromptName> [...promptVariables]`
+**Syntax:** `ai send <messageOrPromptName> [--options] [...promptVariables]`
 
 **Examples:**
 ```
