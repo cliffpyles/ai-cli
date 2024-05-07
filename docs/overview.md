@@ -85,4 +85,4 @@ For common issues:
 - **File Not Found**: Ensure the file path in the `--file` option is correct.
 - **Service Unreachable**: Check your network settings and service availability.
 
-
+Should you encounter error messages such as "Invalid command syntax", make sure to check the command syntax and available options by running `ai --help`.
