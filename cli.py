@@ -4,8 +4,15 @@ import click
 import json
 import os
 from commands.commands import create_prompt, list_prompts, remove_prompt, send_message, setup_config
+from plugins.plugin_manager import PluginManager
+from plugins.openai_plugin import OpenAIPlugin
 
-# Function to load settings
+# Initialize Plugin Manager and register plugins
+plugin_manager = PluginManager()
+openai_plugin = OpenAIPlugin()
+plugin_manager.register_plugin(openai_plugin)
+
+# Load settings
 def load_settings():
     settings_path = os.path.expanduser('~/.ask-ai/settings.json')
     if os.path.exists(settings_path):
@@ -75,8 +82,8 @@ def send(messageorpromptname, service, model, requests, file, outputtype, prompt
         for var in promptvariables:
             key, value = var.split('=')
             variables[key] = value
-        send_message(messageorpromptname, service, model, requests, file, outputtype, variables)
-        click.echo("Message sent successfully.")
+        response = plugin_manager.send_message(service, messageorpromptname, model, requests, file, outputtype, variables)
+        click.echo("Message sent successfully. Response: " + response)
     except ValueError:
         click.echo("Error parsing prompt variables. Use format 'key=value'.", err=True)
     except Exception as e:
