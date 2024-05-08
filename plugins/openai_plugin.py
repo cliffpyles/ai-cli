@@ -1,10 +1,13 @@
 from .base_plugin import BasePlugin
 import openai
 
+PLUGIN_NAME = "OpenAI"
+PLUGIN_DESCRIPTION = "Adds support for OpenAI interactions."
+
 
 class OpenAIPlugin(BasePlugin):
     def __init__(self):
-        super().__init__("OpenAI")
+        super().__init__(name=PLUGIN_NAME, description=PLUGIN_DESCRIPTION)
         self.client = openai.OpenAI()
 
     def send_prompt(self, prompt, model, requests, file_paths, output_type, variables):
@@ -85,4 +88,3 @@ class OpenAIPlugin(BasePlugin):
             return self.send_prompt(prompt, model, requests, file, output_type, variables)
         elif message:
             return self.send_message(message, model, requests, file, output_type, variables)
-

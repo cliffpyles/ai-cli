@@ -32,7 +32,7 @@ settings = load_settings()
 
 @click.group()
 def cli():
-    """This CLI tool facilitates interaction with AI services from the command line."""
+    """CLI tool for interacting with AI services from the command line."""
     pass
 
 
@@ -41,14 +41,14 @@ def config():
     setup_config()
 
 
-@cli.group(help='Manage prompt files used with AI services.')
+@cli.group(help='Manage prompts used for service interactions.')
 def prompt():
     pass
 
 @prompt.command('create', help='Create a prompt file.')
 @click.argument('promptname')
 @click.option('--content', '-c', default='', help='Specifies the text content of the new prompt.')
-def create(promptname, content):
+def prompt_create(promptname, content):
     try:
         create_prompt(promptname, content)
         click.echo(f"Prompt '{promptname}' created successfully.")
@@ -57,7 +57,7 @@ def create(promptname, content):
 
 
 @prompt.command('list', help='List all existing prompts.')
-def list():
+def prompt_list():
     try:
         prompts = list_prompts()
         for prompt in prompts:
@@ -68,7 +68,7 @@ def list():
 
 @prompt.command('remove', help='Remove a prompt file.')
 @click.argument('promptname')
-def remove(promptname):
+def prompt_remove(promptname):
     try:
         remove_prompt(promptname)
         click.echo(f"Prompt '{promptname}' removed successfully.")
@@ -76,10 +76,10 @@ def remove(promptname):
         click.echo(f"Failed to remove prompt: {str(e)}", err=True)
 
 
-@cli.command('send', help='Send a message or prompt to an AI service.')
+@cli.command('send', help='Send a message or prompt to a service.')
 @click.option('--prompt', '-p', help='Specifies the name of a prompt to use.')
 @click.option('--message', '-m', help='Specifies a raw message to send.')
-@click.option('--service', '-s', default=settings['service'], help='Specifies which AI service to use.')
+@click.option('--service', '-s', default=settings['service'], help='Specifies which service to use.')
 @click.option('--model', '-m', default=settings['model'], help='Designates the AI model to employ.')
 @click.option('--requests', '-r', default=1, type=int, help='Determines how many requests to break up the message into.')
 @click.option('--file', type=click.Path(exists=True),  multiple=True, help='Specifies a file to use for the context of the question.')
@@ -106,6 +106,20 @@ def send(prompt, message, service, model, requests, file, outputtype, promptvari
         click.echo("Error parsing prompt variables. Use format 'key=value'.", err=True)
     except Exception as e:
         click.echo(f"Failed to send message: {str(e)}", err=True)
+
+
+@cli.group(help='Manage plugins used for extending service support.')
+def plugin():
+    pass
+
+
+@plugin.command('list', help='List all plugins.')
+def plugin_list():
+    try:
+        for plugin in plugin_manager.list_plugins():
+            click.echo(f"{plugin['name']} - {plugin['description']}")
+    except Exception as e:
+        click.echo(f"Failed to list plugins: {str(e)}", err=True)
 
 
 @cli.command('help', help='Detailed command usage and help.')

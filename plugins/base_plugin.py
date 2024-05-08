@@ -4,8 +4,17 @@ from config import PROMPTS_DIR
 
 
 class BasePlugin:
-    def __init__(self, service_name):
-        self.service_name = service_name.lower()
+    def __init__(self, name, description):
+        self.name = name
+        self.key = name.lower()
+        self.description = description
+
+    def get_info(self):
+        return {
+            "name": self.name,
+            "description": self.description,
+            "key": self.key,
+        }
 
     def load_files(self, file_paths=[]):
         loaded_files = {}
@@ -33,7 +42,7 @@ class BasePlugin:
         settings = {k.lower(): v for k, v in parsed_prompt.metadata.get('_settings', {}).items()}
 
         # Extract settings specifically for this plugin, ensuring case insensitivity
-        plugin_settings = settings.get(self.service_name, {})
+        plugin_settings = settings.get(self.key, {})
 
         # Extract all other variables excluding '_settings'
         variables = {k: v for k, v in parsed_prompt.metadata.items() if k != '_settings'}
