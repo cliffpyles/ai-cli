@@ -82,7 +82,7 @@ def remove(promptname):
 @click.option('--service', '-s', default=settings['service'], help='Specifies which AI service to use.')
 @click.option('--model', '-m', default=settings['model'], help='Designates the AI model to employ.')
 @click.option('--requests', '-r', default=1, type=int, help='Determines how many requests to break up the message into.')
-@click.option('--file', type=click.Path(exists=True), help='Specifies a file to use for the context of the question.')
+@click.option('--file', type=click.Path(exists=True),  multiple=True, help='Specifies a file to use for the context of the question.')
 @click.option('--format', 'outputtype', default=settings['format'], type=click.Choice(['json', 'text']), help='Defines the format of the response.')
 @click.argument('promptvariables', nargs=-1)
 def send(prompt, message, service, model, requests, file, outputtype, promptvariables):

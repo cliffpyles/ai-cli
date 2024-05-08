@@ -1,10 +1,25 @@
 import frontmatter
+from pathlib import Path
 from config import PROMPTS_DIR
 
 
 class BasePlugin:
     def __init__(self, service_name):
         self.service_name = service_name.lower()
+
+    def load_files(self, file_paths=[]):
+        loaded_files = {}
+
+        for file_path in file_paths:
+            file = Path(file_path)
+
+            if not file.exists():
+                raise FileNotFoundError(f"File '{file_path}' does not exist.")
+
+            file_content = file.read_text()
+            loaded_files[file_path] = file_content
+
+        return loaded_files
 
     def load_prompt(self, prompt_name):
         prompt_path = PROMPTS_DIR / f"{prompt_name}.md"
