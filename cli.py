@@ -45,6 +45,7 @@ def config():
 def prompt():
     pass
 
+
 @prompt.command('create', help='Create a prompt file.')
 @click.argument('promptname')
 @click.option('--content', '-c', default='', help='Specifies the text content of the new prompt.')

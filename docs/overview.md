@@ -2,12 +2,6 @@
 
 This CLI tool facilitates interaction with AI services, providing a streamlined way to manage prompts and send queries directly from the command line. It's designed for developers, data scientists, and AI enthusiasts looking to leverage AI models without the need for a GUI.
 
-## Installation
-To install the CLI tool, run the following command:
-```
-pip install ai-cli
-```
-
 ## Commands
 
 ### Config
