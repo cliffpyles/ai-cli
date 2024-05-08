@@ -12,10 +12,13 @@ class OpenAIPlugin(BasePlugin):
 
         template_variables.update(variables)
 
-        system_context = settings.get('system_context', '')
-        temperature = settings.get('temperature', None)
-        response_format = "json_object" if output_type == 'json' else "text"
+        system_context = settings.get("system_context", "")
+        temperature = settings.get("temperature", None)
+        response_format = "json_object" if output_type == "json" else "text"
         user_message = _.format(**template_variables)
+
+        if output_type == "json":
+            user_message += "\n\nFormat the response as json."
 
         messages = []
         messages.append({"role": "system", "content": system_context})
@@ -35,15 +38,18 @@ class OpenAIPlugin(BasePlugin):
 
     def send_message(self, message, model, requests, file, output_type, variables):
         system_context = "You are a helpful assistant."
-        response_format = {"type": "json_object" if output_type == 'json' else "text"}
+        response_format = {"type": "json_object" if output_type == "json" else "text"}
 
         user_message = message.format(**variables)
+
+        if output_type == "json":
+            user_message += "\n\nFormat the response as json."
 
         messages = []
         messages.append({"role": "system", "content": system_context})
         messages.append({"role": "user", "content": user_message})
 
-        response_format = "json_object" if output_type == 'json' else "text"
+        response_format = "json_object" if output_type == "json" else "text"
 
         try:
             completion = self.client.chat.completions.create(
