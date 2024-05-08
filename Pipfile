@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 click = "*"
+openai = "*"
+python-frontmatter = "*"
 
 [dev-packages]
 

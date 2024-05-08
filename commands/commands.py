@@ -1,25 +1,16 @@
 # commands/commands.py
-from pathlib import Path
 import json
+from config import PROMPTS_DIR, CONFIG_FILE, DEFAULT_SETTINGS
 
-# Base directory for storing prompts
-BASE_DIR = Path.home() / '.ask-ai'
-PROMPTS_DIR = BASE_DIR / 'prompts'
-CONFIG_FILE = BASE_DIR / 'settings.json'
 
 def setup_config():
     PROMPTS_DIR.mkdir(parents=True, exist_ok=True)
     if not CONFIG_FILE.exists():
-        # Default configuration settings
-        config_data = {
-            'service': 'OpenAI',
-            'model': 'gpt-4-turbo-preview',
-            'format': 'text'
-        }
-        CONFIG_FILE.write_text(json.dumps(config_data, indent=4))
+        CONFIG_FILE.write_text(json.dumps(DEFAULT_SETTINGS, indent=4))
         print("Configuration file created.")
     else:
         print("Configuration file already exists.")
+
 
 def create_prompt(prompt_name, content):
     """
@@ -33,7 +24,6 @@ def create_prompt(prompt_name, content):
     if prompt_path.exists():
         raise FileExistsError(f"Prompt '{prompt_name}' already exists.")
     prompt_path.write_text(content)
-    print(f"Prompt '{prompt_name}' created successfully.")
 
 
 def list_prompts():
@@ -44,6 +34,7 @@ def list_prompts():
         list of str: List of names of all prompt files.
     """
     return [file.stem for file in PROMPTS_DIR.glob('*.md')]
+
 
 def remove_prompt(prompt_name):
     """
@@ -56,4 +47,3 @@ def remove_prompt(prompt_name):
     if not prompt_path.exists():
         raise FileNotFoundError(f"Prompt '{prompt_name}' does not exist.")
     prompt_path.unlink()
-    print(f"Prompt '{prompt_name}' removed successfully.")

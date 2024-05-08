@@ -12,6 +12,7 @@ plugin_manager = PluginManager()
 openai_plugin = OpenAIPlugin()
 plugin_manager.register_plugin(openai_plugin)
 
+
 # Load settings
 def load_settings():
     settings_path = os.path.expanduser('~/.ask-ai/settings.json')
@@ -25,16 +26,20 @@ def load_settings():
             'format': 'text'
         }
 
+
 settings = load_settings()
+
 
 @click.group()
 def cli():
     """This CLI tool facilitates interaction with AI services from the command line."""
     pass
 
+
 @cli.command('config', help='Set up the initial configuration.')
 def config():
     setup_config()
+
 
 @cli.group(help='Manage prompt files used with AI services.')
 def prompt():
@@ -50,6 +55,7 @@ def create(promptname, content):
     except Exception as e:
         click.echo(f"Failed to create prompt: {str(e)}", err=True)
 
+
 @prompt.command('list', help='List all existing prompts.')
 def list():
     try:
@@ -58,6 +64,7 @@ def list():
             click.echo(prompt)
     except Exception as e:
         click.echo(f"Failed to list prompts: {str(e)}", err=True)
+
 
 @prompt.command('remove', help='Remove a prompt file.')
 @click.argument('promptname')
@@ -68,26 +75,38 @@ def remove(promptname):
     except Exception as e:
         click.echo(f"Failed to remove prompt: {str(e)}", err=True)
 
-@cli.command('send', help='Send a message or a prompt to an AI service.')
-@click.argument('messageorpromptname')
+
+@cli.command('send', help='Send a message or prompt to an AI service.')
+@click.option('--prompt', '-p', help='Specifies the name of a prompt to use.')
+@click.option('--message', '-m', help='Specifies a raw message to send.')
 @click.option('--service', '-s', default=settings['service'], help='Specifies which AI service to use.')
 @click.option('--model', '-m', default=settings['model'], help='Designates the AI model to employ.')
 @click.option('--requests', '-r', default=1, type=int, help='Determines how many requests to break up the message into.')
 @click.option('--file', type=click.Path(exists=True), help='Specifies a file to use for the context of the question.')
 @click.option('--format', 'outputtype', default=settings['format'], type=click.Choice(['json', 'text']), help='Defines the format of the response.')
 @click.argument('promptvariables', nargs=-1)
-def send(messageorpromptname, service, model, requests, file, outputtype, promptvariables):
+def send(prompt, message, service, model, requests, file, outputtype, promptvariables):
+    if not (prompt or message):
+        click.echo("You must specify either a prompt or a message.", err=True)
+        return
+
+    if prompt and message:
+        click.echo("You must specify either a prompt or a message, but not both.", err=True)
+        return
+
     try:
         variables = {}
         for var in promptvariables:
             key, value = var.split('=')
             variables[key] = value
-        response = plugin_manager.send_message(service, messageorpromptname, model, requests, file, outputtype, variables)
-        click.echo("Message sent successfully. Response: " + response)
+
+        response = plugin_manager.send(prompt, message, service, model, requests, file, outputtype, variables)
+        click.echo(response)
     except ValueError:
         click.echo("Error parsing prompt variables. Use format 'key=value'.", err=True)
     except Exception as e:
         click.echo(f"Failed to send message: {str(e)}", err=True)
+
 
 @cli.command('help', help='Detailed command usage and help.')
 @click.argument('command', required=False)
@@ -100,6 +119,7 @@ def help(command):
             click.echo(f"No help found for '{command}'", err=True)
         else:
             click.echo(command_obj.get_help(click.Context(command_obj)))
+
 
 if __name__ == '__main__':
     cli()
