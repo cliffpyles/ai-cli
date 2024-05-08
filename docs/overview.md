@@ -56,16 +56,20 @@ Remove a prompt file.
 
 Send a message or a prompt to an AI service.
 
-**Syntax:** `ai send <messageOrPromptName> [--options] [...promptVariables]`
+**Syntax:** `ai send [--options] [...promptVariables]`
 
 **Examples:**
 ```
-ai send "Give me a list of 25 major cities"
-ai send "Give me a list of {count} major cities" count=25
+ai send --message="Give me a list of 25 major cities"
+ai send --message="Give me a list of {count} major cities" count=25
+ai send --prompt="some_prompt"
+ai send --prompt="some_prompt" count=25
 ```
 
 ###### Options
 
+- **--prompt, -p <promptName>**: Specifies the name of a prompt to use.
+- **--message, -m <message>**: Specifies a raw message to send.
 - **--service, -s <serviceName>**: Specifies which AI service to use (default is OpenAI).
 - **--model, -m <modelName>**: Designates the AI model to employ (default is gpt-4-turbo-preview).
 - **--requests, -r**: Determines how many requests to break up the message into (default is 1).
