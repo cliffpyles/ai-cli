@@ -3,7 +3,7 @@
 import click
 import json
 import os
-from commands.commands import create_prompt, list_prompts, remove_prompt, send_message, setup_config
+from commands.commands import create_prompt, list_prompts, remove_prompt, setup_config
 from plugins.plugin_manager import PluginManager
 from plugins.openai_plugin import OpenAIPlugin
 

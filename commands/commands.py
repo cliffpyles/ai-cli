@@ -57,8 +57,3 @@ def remove_prompt(prompt_name):
         raise FileNotFoundError(f"Prompt '{prompt_name}' does not exist.")
     prompt_path.unlink()
     print(f"Prompt '{prompt_name}' removed successfully.")
-
-
-def send_message(message_or_prompt_name, service, model, requests, file, output_type, prompt_variables):
-    print(f"Sending '{message_or_prompt_name}' to service {service} using model {model} with {requests} requests")
-    # Add additional functionality here
